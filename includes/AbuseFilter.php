@@ -1139,6 +1139,26 @@ class AbuseFilter {
 		AbuseFilterVariableHolder $vars, $title, $group, User $user, $mode = 'execute'
 	) {
 		global $wgAbuseFilterLogIP;
+		/**
+		 * Fandom change - begin
+		 *
+		 * Backports from AbuseFilterShouldFilterAction from 1.34 until we are able to
+		 * upgrade to MW 1.34
+		 */
+		$skipReasons = [];
+		$shouldFilter = Hooks::run(
+			'AbuseFilterShouldFilterAction',
+			[ $vars, $title, $user, &$skipReasons ]
+		);
+		if ( !$shouldFilter ) {
+			$logger = LoggerFactory::getInstance( 'AbuseFilter' );
+			$action = $vars->getVar( 'action' )->toString();
+			$logger->info( "Skipping action {$action}. Reasons provided: " . implode( ', ', $skipReasons ) );
+			return Status::newGood();
+		}
+		/**
+		 * Fandom change - end
+		 */
 
 		$logger = LoggerFactory::getInstance( 'StashEdit' );
 		$statsd = MediaWikiServices::getInstance()->getStatsdDataFactory();
