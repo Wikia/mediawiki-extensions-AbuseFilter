@@ -36,12 +36,13 @@ class AbuseFilterExaminePager extends ReverseChronologicalPager {
 		}
 
 		$conds[] = $this->mPage->buildTestConditions( $dbr );
+		$conds = array_merge( $conds, $this->mPage->buildVisibilityConditions( $dbr, $this->getUser() ) );
 
 		$rcQuery = RecentChange::getQueryInfo();
 		$info = [
 			'tables' => $rcQuery['tables'],
 			'fields' => $rcQuery['fields'],
-			'conds' => array_filter( $conds ),
+			'conds' => $conds,
 			'options' => [ 'ORDER BY' => 'rc_timestamp DESC' ],
 			'join_conds' => $rcQuery['joins'],
 		];
