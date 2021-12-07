@@ -325,7 +325,6 @@ class AbuseFilterHooks {
 				30,
 				function () use ( $key ) {
 					return (int)ObjectCache::getMainStashInstance()->get( $key );
-					//return (int)MediaWikiServices::getInstance()->getMainObjectStash()->get( $key );
 				}
 			);
 
