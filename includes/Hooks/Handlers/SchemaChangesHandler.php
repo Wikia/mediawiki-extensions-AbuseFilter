@@ -80,6 +80,14 @@ class SchemaChangesHandler implements LoadExtensionSchemaUpdatesHook {
 					"$dir/mysql/patch-rename-indexes.sql",
 					true
 				);
+
+				$updater->renameExtensionIndex(
+					'abuse_filter_log',
+					'filter_timestamp_full',
+					'afl_filter_timestamp_full',
+					"$dir/mysql/patch-rename-index-filter_timestamp_full.sql",
+					true
+				);
 			}
 		} elseif ( $dbType === 'postgres' ) {
 			$updater->addExtensionUpdate( [
