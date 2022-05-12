@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\AbuseFilter\Hooks\Handlers;
 
 use InvalidArgumentException;
 use MediaWiki\Extension\AbuseFilter\AbuseFilterPreAuthenticationProvider;
+use MediaWiki\Extension\AbuseFilter\Parser\AFPData;
 
 /**
  * This class runs a callback when the extension is registered, right after configuration has been
@@ -18,6 +19,12 @@ class RegistrationCallback {
 			   $wgGroupPermissions, $wgAbuseFilterRestrictions, $wgAbuseFilterDisallowGlobalLocalBlocks,
 			   $wgAbuseFilterActionRestrictions, $wgAbuseFilterLocallyDisabledGlobalActions,
 			   $wgAbuseFilterAflFilterMigrationStage;
+		/**
+		 * AFPData changed it namespace, but we didn't run this migration script before.
+		 * Therefore UpdateVarDumps will fail as value cannot be properly unserialized. This
+		 * alias is only needed for the migration and we don't need to port it later.
+		 */
+		class_alias( AFPData::class, 'AFPData' );
 
 		// @todo Remove this in a future release (added in 1.33)
 		if ( isset( $wgAbuseFilterProfile ) || isset( $wgAbuseFilterProfiling ) ) {
